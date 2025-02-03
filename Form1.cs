@@ -267,11 +267,7 @@ namespace DBMS.CRUD.Nortwind
             }
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            frmReceipt_Details frm = new frmReceipt_Details();
-            frm.ShowDialog();
-        }
+
     }
 }
 

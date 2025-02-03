@@ -74,5 +74,11 @@ namespace DBMS.CRUD.Nortwind
             Form1 f = new Form1();
             f.ShowDialog();
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            frmReceipt_Details frm = new frmReceipt_Details();
+            frm.ShowDialog();
+        }
     }
 }

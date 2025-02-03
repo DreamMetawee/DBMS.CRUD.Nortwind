@@ -35,18 +35,20 @@
             btnCustomer = new Button();
             btnlogout = new Button();
             btnLogin = new Button();
+            button1 = new Button();
             groupBoxManageData.SuspendLayout();
             SuspendLayout();
             // 
             // groupBoxManageData
             // 
+            groupBoxManageData.Controls.Add(button1);
             groupBoxManageData.Controls.Add(btnEmployees);
             groupBoxManageData.Controls.Add(btnShipper);
             groupBoxManageData.Controls.Add(btnSupplier);
             groupBoxManageData.Controls.Add(btnCustomer);
             groupBoxManageData.Location = new Point(72, 132);
             groupBoxManageData.Name = "groupBoxManageData";
-            groupBoxManageData.Size = new Size(250, 264);
+            groupBoxManageData.Size = new Size(656, 264);
             groupBoxManageData.TabIndex = 5;
             groupBoxManageData.TabStop = false;
             groupBoxManageData.Text = "Manage Data";
@@ -112,6 +114,16 @@
             btnLogin.UseVisualStyleBackColor = true;
             btnLogin.Click += btnLogin_Click;
             // 
+            // button1
+            // 
+            button1.Location = new Point(540, 48);
+            button1.Name = "button1";
+            button1.Size = new Size(94, 29);
+            button1.TabIndex = 8;
+            button1.Text = "Receipt";
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
+            // 
             // Form2
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -136,5 +148,6 @@
         private Button btnlogout;
         private Button btnLogin;
         private Button btnEmployees;
+        private Button button1;
     }
 }

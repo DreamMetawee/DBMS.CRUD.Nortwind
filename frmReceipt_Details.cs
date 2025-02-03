@@ -83,7 +83,7 @@ namespace DBMS.CRUD.Nortwind
         {
             if (e.KeyCode == Keys.Enter)
             {
-                string sql = "Select EmployeeID, Title+FirstName+space(2)+LastName EmpName, Title"
+                string sql = "Select EmployeeID, TitleOfCourtesy+FirstName+space(2)+LastName EmpName, Title"
                 + " from Employees"
                 + " Where EmployeeID = @EmployeeID";
                 SqlCommand comm = new SqlCommand(sql, conn);
@@ -140,9 +140,9 @@ namespace DBMS.CRUD.Nortwind
                     MessageBox.Show("ไมพ่ บสนิ คา้รหัสนี้", "ผิดพลาด");
                     ClearProductData();
                 }
-                txtProductID.Focus();
+                txtQuantity.Focus();
 
-                txtProductID.SelectAll();
+                txtQuantity.SelectAll();
                 dr.Close();
                 conn.Close();
             }

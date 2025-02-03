@@ -35,6 +35,7 @@
             btnInsert = new Button();
             btnDelete = new Button();
             btnUpdate = new Button();
+            button1 = new Button();
             ((System.ComponentModel.ISupportInitialize)dgvCustomer).BeginInit();
             SuspendLayout();
             // 
@@ -111,11 +112,22 @@
             btnUpdate.UseVisualStyleBackColor = true;
             btnUpdate.Click += btnUpdate_Click;
             // 
+            // button1
+            // 
+            button1.Location = new Point(331, 388);
+            button1.Name = "button1";
+            button1.Size = new Size(94, 29);
+            button1.TabIndex = 7;
+            button1.Text = "Receipt";
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(button1);
             Controls.Add(btnUpdate);
             Controls.Add(btnDelete);
             Controls.Add(btnInsert);
@@ -139,5 +151,6 @@
         private Button btnInsert;
         private Button btnDelete;
         private Button btnUpdate;
+        private Button button1;
     }
 }

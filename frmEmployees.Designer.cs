@@ -377,6 +377,7 @@
             imgPhoto.Size = new Size(125, 39);
             imgPhoto.TabIndex = 38;
             imgPhoto.TabStop = false;
+            imgPhoto.Click += imgPhoto_Click;
             // 
             // frmEmployees
             // 

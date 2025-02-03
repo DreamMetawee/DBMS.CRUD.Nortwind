@@ -25,6 +25,7 @@ namespace DBMS.CRUD.Nortwind
         string PostalCode = string.Empty;
         string Country = string.Empty;
         string Phone = string.Empty;
+
         public string Status { get; set; }
         public int SupplierID { get; private set; }
         public string HomePage { get; private set; }
@@ -78,15 +79,15 @@ namespace DBMS.CRUD.Nortwind
 
         private void btnInsert_Click(object sender, EventArgs e)
         {
-            frmCustomers f = new frmCustomers();
-            f.Status = "insert";
-            f.ShowDialog();
-            showdata();
+            //frmCustomers f = new frmCustomers();
+            //f.Status = "insert";
+            //f.ShowDialog();
+            //showdata();
 
-            frmSupplier frm = new frmSupplier();
-            frm.Status = "insert";
-            frm.ShowDialog();
-            showdata();
+            //frmSupplier frm = new frmSupplier();
+            //frm.Status = "insert";
+            //frm.ShowDialog();
+            //showdata();
 
             frmEmployees frmEm = new frmEmployees();
             frmEm.Status = "insert";
@@ -228,29 +229,35 @@ namespace DBMS.CRUD.Nortwind
             try
             {
                 // เชื่อมต่อฐานข้อมูล
-                using (conn = ConnectDB.ConnectNorthwind()) // ใช้ using statement
+                using (SqlConnection conn = ConnectDB.ConnectNorthwind()) // ใช้ using statement
                 {
                     // เขียนคำสั่ง SQL สำหรับการลบข้อมูล
                     string sql = "DELETE FROM Customers WHERE CustomerID = @CustomerID";
 
                     // สร้างคำสั่ง SQL
-                    cmd = new SqlCommand(sql, conn);
-                    cmd.Parameters.AddWithValue("@CustomerID", customerID);
-
-                    // เปิดการเชื่อมต่อ
-                    conn.Open();
-
-                    // ลบข้อมูล
-                    int rowsAffected = cmd.ExecuteNonQuery();
-
-                    if (rowsAffected > 0)
+                    using (SqlCommand cmd = new SqlCommand(sql, conn))
                     {
-                        MessageBox.Show("ลบข้อมูลสำเร็จ", "ผลการดำเนินการ");
-                        showdata(); // รีเฟรชข้อมูลใน DataGridView
-                    }
-                    else
-                    {
-                        MessageBox.Show("ไม่พบข้อมูลที่ต้องการลบ", "ข้อผิดพลาด");
+                        cmd.Parameters.AddWithValue("@CustomerID", customerID);
+
+                        // เปิดการเชื่อมต่อ
+                        if (conn.State == ConnectionState.Open)
+                        {
+                            conn.Close();
+                        }
+                        conn.Open();
+
+                        // ลบข้อมูล
+                        int rowsAffected = cmd.ExecuteNonQuery();
+
+                        if (rowsAffected > 0)
+                        {
+                            MessageBox.Show("ลบข้อมูลสำเร็จ", "ผลการดำเนินการ");
+                            showdata(); // รีเฟรชข้อมูลใน DataGridView
+                        }
+                        else
+                        {
+                            MessageBox.Show("ไม่พบข้อมูลที่ต้องการลบ", "ข้อผิดพลาด");
+                        }
                     }
                 } // การใช้ 'using' statement จะช่วยปิดการเชื่อมต่ออัตโนมัติ
             }
@@ -259,8 +266,14 @@ namespace DBMS.CRUD.Nortwind
                 MessageBox.Show("เกิดข้อผิดพลาดในการลบข้อมูล: " + ex.Message, "ข้อผิดพลาด");
             }
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            frmReceipt_Details frm = new frmReceipt_Details();
+            frm.ShowDialog();
+        }
     }
-    }
+}
 
     
 

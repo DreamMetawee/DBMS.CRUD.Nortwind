@@ -91,28 +91,74 @@ namespace DBMS.CRUD.Nortwind
                 MessageBox.Show("โปรดกรอกข้อมูล", "เกิดข้อผิดพลาด");
                 return;
             }
+
             string sql = "Insert into Employees(LastName,FirstName,Title,TitleOfCourtesy,BirthDate,HireDate,Address,City,Region,PostalCode,Country,HomePhone,Photo,Notes,PhotoPath,Extension,ReportsTo) " +
-                "Values(@LastName,@FirstName,@Title,@TitleOfCourtesy,@BirthDate,@HireDate,@Address,@City,@Region,@PostalCode,@Country,@HomePhone,@Photo,@Notes,@PhotoPath,@Extension,@ReportsTo)";
-            cmd = new SqlCommand(sql, conn);
-            cmd.Parameters.AddWithValue("@LastName", txtLastName.Text);
-            cmd.Parameters.AddWithValue("@FirstName", txtFirstName.Text);
-            cmd.Parameters.AddWithValue("@Title", txtTitle.Text);
-            cmd.Parameters.AddWithValue("@TitleOfCourtesy", txtTitleOfCourtesy.Text);
-            cmd.Parameters.AddWithValue("@BirthDate", txtBirthDate.Text);
-            cmd.Parameters.AddWithValue("@HireDate", txtHireDate.Text);
-            cmd.Parameters.AddWithValue("@Address", txtAddress.Text);
-            cmd.Parameters.AddWithValue("@City", txtCity.Text);
-            cmd.Parameters.AddWithValue("@Region", txtRegion.Text);
-            cmd.Parameters.AddWithValue("@PostalCode", txtPostalCode.Text);
-            cmd.Parameters.AddWithValue("@Country", txtCountry.Text);
-            cmd.Parameters.AddWithValue("@HomePhone", txtHomePhone.Text);
-            cmd.Parameters.AddWithValue("@Photo", imgPhoto.Image);
-            cmd.Parameters.AddWithValue("@Notes", txtNotes.Text);
-            cmd.Parameters.AddWithValue("@PhotoPath", txtPhotoPath.Text);
-            cmd.Parameters.AddWithValue("@Extension", txtExtension.Text);
-            cmd.Parameters.AddWithValue("@ReportsTo", txtReportsTo.Text);
-            cmd.ExecuteNonQuery();
-            MessageBox.Show("เพิ่มข้อมูลเรียบร้อยแล้ว");
+                         "Values(@LastName,@FirstName,@Title,@TitleOfCourtesy,@BirthDate,@HireDate,@Address,@City,@Region,@PostalCode,@Country,@HomePhone,@Photo,@Notes,@PhotoPath,@Extension,@ReportsTo)";
+
+            using (SqlConnection conn = ConnectDB.ConnectNorthwind())
+            {
+                using (SqlCommand cmd = new SqlCommand(sql, conn))
+                {
+                    // Add parameters
+                    cmd.Parameters.AddWithValue("@LastName", txtLastName.Text);
+                    cmd.Parameters.AddWithValue("@FirstName", txtFirstName.Text);
+                    cmd.Parameters.AddWithValue("@Title", txtTitle.Text);
+                    cmd.Parameters.AddWithValue("@TitleOfCourtesy", txtTitleOfCourtesy.Text);
+
+                    // Convert and validate BirthDate
+                    if (DateTime.TryParse(txtBirthDate.Text, out DateTime birthDate))
+                    {
+                        cmd.Parameters.AddWithValue("@BirthDate", birthDate);
+                    }
+                    else
+                    {
+                        cmd.Parameters.AddWithValue("@BirthDate", DBNull.Value); // Handle invalid or empty input
+                    }
+
+                    // Convert and validate HireDate
+                    if (DateTime.TryParse(txtHireDate.Text, out DateTime hireDate))
+                    {
+                        cmd.Parameters.AddWithValue("@HireDate", hireDate);
+                    }
+                    else
+                    {
+                        cmd.Parameters.AddWithValue("@HireDate", DBNull.Value); // Handle invalid or empty input
+                    }
+
+                    cmd.Parameters.AddWithValue("@Address", txtAddress.Text);
+                    cmd.Parameters.AddWithValue("@City", txtCity.Text);
+                    cmd.Parameters.AddWithValue("@Region", txtRegion.Text);
+                    cmd.Parameters.AddWithValue("@PostalCode", txtPostalCode.Text);
+                    cmd.Parameters.AddWithValue("@Country", txtCountry.Text);
+                    cmd.Parameters.AddWithValue("@HomePhone", txtHomePhone.Text);
+
+                    // Handle the photo conversion as in the previous example
+                    if (imgPhoto.Image != null)
+                    {
+                        using (MemoryStream ms = new MemoryStream())
+                        {
+                            imgPhoto.Image.Save(ms, imgPhoto.Image.RawFormat);
+                            cmd.Parameters.AddWithValue("@Photo", ms.ToArray());
+                        }
+                    }
+                    else
+                    {
+                        cmd.Parameters.AddWithValue("@Photo", DBNull.Value);
+                    }
+
+                    cmd.Parameters.AddWithValue("@Notes", txtNotes.Text);
+                    cmd.Parameters.AddWithValue("@PhotoPath", txtPhotoPath.Text);
+                    cmd.Parameters.AddWithValue("@Extension", txtExtension.Text);
+                    cmd.Parameters.AddWithValue("@ReportsTo", txtReportsTo.Text);
+
+                    // Open the connection
+                    conn.Open();
+
+                    // Execute the query
+                    cmd.ExecuteNonQuery();
+                    MessageBox.Show("เพิ่มข้อมูลเรียบร้อยแล้ว");
+                }
+            }
         }
 
         private void UpdateEmployee()
@@ -145,6 +191,21 @@ namespace DBMS.CRUD.Nortwind
             cmd.Parameters.AddWithValue("@ReportsTo", txtReportsTo.Text);
             cmd.ExecuteNonQuery();
             MessageBox.Show("ปรับปรุงข้อมูลเรียบร้อยแล้ว");
+        }
+
+        private void imgPhoto_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            {
+                openFileDialog.Filter = "Image Files|*.jpg;*.jpeg;*.png;*.bmp;*.gif";
+                openFileDialog.Title = "Select an Image";
+
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    // Display the selected image in the PictureBox
+                    imgPhoto.Image = Image.FromFile(openFileDialog.FileName);
+                }
+            }
         }
     }
 }
